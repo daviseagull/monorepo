@@ -1,5 +1,5 @@
 packages:
   - packages/api
-  - packages/apps/*
+  - packages/web
   - packages/shared/*
 

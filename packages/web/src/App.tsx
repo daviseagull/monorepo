@@ -1,3 +1,4 @@
+import { dateUtils } from '@monorepo/utils'
 import { useState } from 'react'
 import './App.css'
 import reactLogo from './assets/react.svg'
@@ -21,9 +22,7 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <p>Test {dateUtils.isBeforeOrSameDay(new Date(), new Date())}</p>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
