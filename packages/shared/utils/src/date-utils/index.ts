@@ -3,8 +3,8 @@ import moment from 'moment'
 export const dateUtils = {
   format(
     date: Period,
-    format: UnitPeriod,
-    inputFormat: LocalDateFormatEnum
+    format: LocalDateFormatEnum,
+    inputFormat?: LocalDateFormatEnum
   ): string {
     return moment(date, inputFormat).format(format)
   },
