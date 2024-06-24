@@ -1,0 +1,6 @@
+coverage
+public
+dist
+.angular
+pnpm-lock.yaml
+pnpm-workspace.yaml
