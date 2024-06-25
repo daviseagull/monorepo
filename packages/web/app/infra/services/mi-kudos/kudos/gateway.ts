@@ -1,6 +1,5 @@
+import { KudosDto } from '@monorepo/types'
+
 export interface HttpKudosServiceGateway {
   findAll(): Promise<KudosDto>
 }
-
-// TODO: MOVER PARA O PACKAGES
-type KudosDto = {}

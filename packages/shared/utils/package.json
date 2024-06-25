@@ -2,14 +2,14 @@
   "name": "@monorepo/utils",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "module": "./dist/utils.js",
   "main": "./dist/utils.js",
   "types": "./dist/main.d.ts",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "jest"
   },
   "devDependencies": {
     "vite": "^5.3.1",

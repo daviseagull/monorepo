@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
-export type CreateUserRequest = z.infer<typeof CreateUserRequestSchema>
+export type KudosDto = z.infer<typeof KudosDtoSchema>
 
-export const CreateUserRequestSchema = z.object({
+export const KudosDtoSchema = z.object({
   cognitoId: z.string(),
   email: z.string().email().toLowerCase(),
   phone: z.string(),
