@@ -1,4 +1,5 @@
 import moment from 'moment'
+import 'moment/locale/en-ca'
 
 export const dateUtils = {
   format(
