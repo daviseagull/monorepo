@@ -9,7 +9,6 @@ export const logger = {
   info(description: string, params: LoggerParams = {}) {
     const zonedTime = dateUtils.format(new Date(), LocalDateFormatEnum.datetime)
     const message = `[${zonedTime}] INFO: ${description}`
-    console.log(message, params)
   },
 
   error(description: string, params: LoggerParams = {}) {
