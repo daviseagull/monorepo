@@ -25,6 +25,7 @@
     "@fastify/swagger-ui": "^4.0.0",
     "@monorepo/types": "workspace:*",
     "fastify": "^4.28.0",
-    "fastify-type-provider-zod": "^2.0.0"
+    "fastify-type-provider-zod": "^2.0.0",
+    "pino": "^9.2.0"
   }
 }

@@ -89,6 +89,9 @@ importers:
       fastify-type-provider-zod:
         specifier: ^2.0.0
         version: 2.0.0(fastify@4.28.0)(zod@3.23.8)
+      pino:
+        specifier: ^9.2.0
+        version: 9.2.0
     devDependencies:
       '@types/node':
         specifier: ^20.14.8

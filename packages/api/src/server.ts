@@ -10,6 +10,7 @@ import {
   serializerCompiler,
   validatorCompiler,
 } from 'fastify-type-provider-zod'
+import { logger } from './config/logger.config'
 import { swaggerConfig } from './config/swagger.config'
 import { UserRoutes } from './routes/users.routes'
 
@@ -25,35 +26,26 @@ declare module 'fastify' {
   }
 }
 
-const fastify = Fastify({
-  logger: {
-    transport: {
-      target: 'pino-pretty',
-      options: {
-        translateTime: 'SYS:standard',
-        ignore: 'pid,hostname',
-      },
-    },
-  },
-})
+const fastify = Fastify({ logger })
 
 // integration with zod
-fastify.withTypeProvider<ZodTypeProvider>()
-fastify.setValidatorCompiler(validatorCompiler)
-fastify.setSerializerCompiler(serializerCompiler)
+fastify
+  .withTypeProvider<ZodTypeProvider>()
+  .setValidatorCompiler(validatorCompiler)
+  .setSerializerCompiler(serializerCompiler)
 
-fastify.register(cors)
-fastify.register(multipart)
-fastify.register(formbody)
+// http config
+fastify.register(cors).register(multipart).register(formbody)
 
-fastify.register(swagger, {
-  ...swaggerConfig.getConfig(),
-  transform: jsonSchemaTransform,
-})
-
-fastify.register(swaggerUi, {
-  routePrefix: '/docs',
-})
+// swagger config
+fastify
+  .register(swagger, {
+    ...swaggerConfig.getConfig(),
+    transform: jsonSchemaTransform,
+  })
+  .register(swaggerUi, {
+    routePrefix: '/docs',
+  })
 
 //hooks
 // fastify.addHook(
@@ -86,7 +78,7 @@ fastify.setErrorHandler((error, request, reply) => {
 
 fastify.listen({ port: 3000 }, function (err, address) {
   if (err) {
-    fastify.log.error(err)
+    fastify.log.fatal(err)
     process.exit(1)
   }
 })
