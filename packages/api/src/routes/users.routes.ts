@@ -1,4 +1,4 @@
-import { KudosDtoSchema } from '@monorepo/types'
+import { createReplyDtoSchema, KudosDtoSchema } from '@monorepo/types'
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 
 export async function UserRoutes(fastify: FastifyInstance) {
@@ -11,6 +11,7 @@ export async function UserRoutes(fastify: FastifyInstance) {
     {
       schema: {
         body: KudosDtoSchema,
+        response: { 200: createReplyDtoSchema(KudosDtoSchema) },
       },
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
