@@ -1,7 +1,7 @@
 {
   "name": "@monorepo/api",
   "version": "1.0.0",
-  "description": "",
+  "description": "example API ",
   "main": "index.js",
   "scripts": {
     "build": "tsc",

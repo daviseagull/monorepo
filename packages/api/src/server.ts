@@ -13,9 +13,8 @@ import {
 } from 'fastify-type-provider-zod'
 import { parsedEnv } from './config/env.config'
 import { logger } from './config/logger.config'
-import { swaggerConfig } from './config/swagger.config'
+import { swaggerConfig } from './config/swagger/swagger.config'
 import { errorHandler } from './handlers/error.handler'
-import { authHook } from './hooks/auth.hook'
 import { UserRoutes } from './routes/users.routes'
 
 declare module 'fastify' {
@@ -45,15 +44,12 @@ fastify
 // swagger config
 fastify
   .register(swagger, {
-    ...swaggerConfig.getConfig(),
+    ...swaggerConfig,
     transform: jsonSchemaTransform,
   })
   .register(swaggerUi, {
     routePrefix: '/docs',
   })
-
-//hooks
-fastify.addHook('preHandler', authHook)
 
 fastify.register(UserRoutes, {
   prefix: '/v1/users',
