@@ -55,9 +55,6 @@ fastify
 //   }
 // )
 
-//db connection
-// fastify.register(dbConnector)
-
 fastify.register(UserRoutes, {
   prefix: '/v1/users',
 })
