@@ -1,28 +1,29 @@
 import cors from '@fastify/cors'
 import formbody from '@fastify/formbody'
+import { fastifyHelmet } from '@fastify/helmet'
 import multipart from '@fastify/multipart'
 import swagger from '@fastify/swagger'
 import swaggerUi from '@fastify/swagger-ui'
 import Fastify from 'fastify'
 import {
-  ZodTypeProvider,
   jsonSchemaTransform,
   serializerCompiler,
   validatorCompiler,
+  ZodTypeProvider,
 } from 'fastify-type-provider-zod'
+import { parsedEnv } from './config/env.config'
 import { logger } from './config/logger.config'
 import { swaggerConfig } from './config/swagger.config'
+import { errorHandler } from './handlers/error.handler'
+import { authHook } from './hooks/auth.hook'
 import { UserRoutes } from './routes/users.routes'
 
 declare module 'fastify' {
   export interface FastifyRequest {
     user: {
-      name: string
+      cognitoId: string
+      id: string
     }
-  }
-  export interface FastifyInstance {
-    signJwt: () => string
-    verifyJwt: () => string
   }
 }
 
@@ -35,7 +36,11 @@ fastify
   .setSerializerCompiler(serializerCompiler)
 
 // http config
-fastify.register(cors).register(multipart).register(formbody)
+fastify
+  .register(fastifyHelmet)
+  .register(cors)
+  .register(multipart)
+  .register(formbody)
 
 // swagger config
 fastify
@@ -48,32 +53,23 @@ fastify
   })
 
 //hooks
-// fastify.addHook(
-//   'onResponse',
-//   async (request: FastifyRequest, reply: FastifyReply) => {
-//     fastify.log.info(`RequestId ${request.id} took ${reply.elapsedTime}`)
-//   }
-// )
+fastify.addHook('preHandler', authHook)
 
 fastify.register(UserRoutes, {
   prefix: '/v1/users',
 })
 
-fastify.setErrorHandler((error, request, reply) => {
-  if (error.code === 'FST_ERR_VALIDATION') {
-    reply.status(400).send({
-      statusCode: 400,
-      error: 'Bad Request',
-      // @ts-ignore
-      issues: error.issues,
-    })
-    return
-  }
+fastify.setErrorHandler(errorHandler)
 
-  reply.send(error)
+const listeners = ['SIGINT', 'SIGTERM']
+listeners.forEach((signal) => {
+  process.on(signal, async () => {
+    await fastify.close()
+    process.exit(0)
+  })
 })
 
-fastify.listen({ port: 3000 }, function (err, address) {
+fastify.listen({ port: parsedEnv.PORT }, function (err, address) {
   if (err) {
     fastify.log.fatal(err)
     process.exit(1)
